@@ -4,8 +4,10 @@
 .vscode
 .history
 
-/www/*
-!/www/.gitkeep
+#/www/*
+#!/www/.gitkeep
+
+/docker/volume-mysql/*
 
 /docker/dumps/*
 !/docker/dumps/.gitkeep
