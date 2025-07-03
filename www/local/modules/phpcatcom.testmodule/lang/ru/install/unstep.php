@@ -1,0 +1,9 @@
+<?php
+
+$MESS["PHPCATCOM_TESTMODULE_UNINSTALL_TITLE"] = "Удаление модуля Пример D7";
+$MESS["PHPCATCOM_TESTMODULE_MODULE_NAME"] = "Пример модуля D7";
+
+$MESS["PHPCATCOM_TESTMODULE_UNINSTALL_SUCCESS"] = "Модуль успешно удалён.";
+$MESS["PHPCATCOM_TESTMODULE_UNINSTALL_FINISH"] = "Завершить";
+
+?>

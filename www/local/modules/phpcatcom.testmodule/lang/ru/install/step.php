@@ -1,0 +1,9 @@
+<?php
+
+$MESS["PHPCATCOM_TESTMODULE_INSTALL_TITLE"] = "Установка модуля Пример D7";
+$MESS["PHPCATCOM_TESTMODULE_MODULE_NAME"] = "Пример модуля D7";
+
+$MESS["PHPCATCOM_TESTMODULE_INSTALL_SUCCESS"] = "Модуль успешно установлен.";
+$MESS["PHPCATCOM_TESTMODULE_INSTALL_NEXT"] = "Далее";
+
+?>
