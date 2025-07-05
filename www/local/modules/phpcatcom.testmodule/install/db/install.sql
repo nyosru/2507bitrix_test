@@ -1,7 +1,7 @@
 CREATE TABLE `phpcatcom_testmodule` (
     id INT(11) NOT NULL AUTO_INCREMENT,
     code VARCHAR(3) NOT NULL,
-    date DATETIME NOT NULL,
+    date DATE NOT NULL,
     course FLOAT NOT NULL,
     PRIMARY KEY (id),
     INDEX idx_code_date (code, date)

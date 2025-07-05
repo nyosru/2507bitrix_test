@@ -10,11 +10,12 @@ if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 // Регистрируем автозагрузчик для классов модуля
 \Bitrix\Main\Loader::registerAutoLoadClasses(
-    "yourvendor.yourmodule", // ID модуля
+    "phpcatcom.testmodule", // ID модуля
     [
         // Ключ — имя класса с namespace, значение — путь к файлу относительно корня модуля
-        "YourVendor\\YourModule\\SomeClass" => "lib/SomeClass.php",
-        "YourVendor\\YourModule\\AnotherClass" => "lib/AnotherClass.php",
+        "Phpcatcom\\Testmodule\\CurrencyRateTable" => "lib/CurrencyRateTable.php",
+//        "Phpcatcom\\TestModule\\SomeClass" => "lib/SomeClass.php",
+//        "YourVendor\\YourModule\\AnotherClass" => "lib/AnotherClass.php",
         // Добавляйте по необходимости
     ]
 );
