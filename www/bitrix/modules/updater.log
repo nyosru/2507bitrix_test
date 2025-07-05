@@ -1,0 +1,6 @@
+2025-07-03 23:17:31 -  - exec CUpdateClient::GetUpdatesList
+2025-07-03 23:17:31 -  - exec CUpdateClient::CollectRequestData
+2025-07-03 23:17:32 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=25.100.500&VERSION=25.100.500&TYPENC=D&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=module.loc&SERVER_NAME=&CHHB=localhost&CSAB=172.19.0.9&SUID=kvxy2hyzr89y3xg2kfl8geiyff8yhav8&CANGZIP=Y&CLIENT_PHPVER=8.3.22&stable=Y&mbfo=0&NGINX=Y&SMD=N&rerere=Y&bitm_main=25.100.500&bitm_b24connector=24.0.100&bitm_bitrixcloud=25.0.0&bitm_clouds=25.100.0&bitm_fileman=25.0.0&bitm_highloadblock=24.100.0&bitm_iblock=25.0.100&bitm_landing=24.800.300&bitm_location=25.100.0&bitm_messageservice=24.900.100&bitm_perfmon=24.200.0&bitm_rest=25.300.100&bitm_search=25.0.0&bitm_security=24.0.300&bitm_seo=24.700.100&bitm_socialservices=24.200.100&bitm_translate=25.0.0&bitm_ui=25.50.200&bitl_en=&bitl_ru=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2025-07-03 23:17:32 -  - exec CUpdateClient::GetHTTPPage
+2025-07-03 23:17:32 -  - TIME GetUpdatesList(request) 0.328 sec
+2025-07-03 23:17:32 -  - exec CUpdateClient::ParseServerData

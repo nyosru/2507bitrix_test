@@ -1,18 +1,18 @@
-2025-Jul-03 08:39:09 Наличие необходимых модулей php (check_php_modules): Ok
+2025-Jul-05 11:07:41 Наличие необходимых модулей php (check_php_modules): Ok
 Все необходимые модули установлены
-2025-Jul-03 08:39:09 Обязательные параметры PHP (check_php_settings): Ok
+2025-Jul-05 11:07:41 Обязательные параметры PHP (check_php_settings): Ok
 Настройки правильные
-2025-Jul-03 08:39:09 Модули веб-сервера (check_security): Ok
+2025-Jul-05 11:07:41 Модули веб-сервера (check_security): Ok
 Конфликтов не выявлено
-2025-Jul-03 08:39:09 Значения переменных сервера (check_server_vars): Ok
+2025-Jul-05 11:07:41 Значения переменных сервера (check_server_vars): Ok
 Корректные
-2025-Jul-03 08:39:09 Сохранение сессии (check_session): Ok
+2025-Jul-05 11:07:41 Сохранение сессии (check_session): Ok
 50% done
-2025-Jul-03 08:39:09 Параметры настройки UTF (mbstring и константа BX_UTF) (check_mbstring): Ok
+2025-Jul-05 11:07:41 Параметры настройки UTF (mbstring и константа BX_UTF) (check_mbstring): Ok
 Правильные. Сайт работает в UTF кодировке
-2025-Jul-03 08:39:09 Служебные скрипты в корне сайта (check_install_scripts): Ok
+2025-Jul-05 11:07:41 Служебные скрипты в корне сайта (check_install_scripts): Ok
 Отсутствуют
-2025-Jul-03 08:39:09 Работа с сокетами (check_socket): Fail
+2025-Jul-05 11:07:41 Работа с сокетами (check_socket): Fail
 Connection to ssl://localhost:443	Fail
 Socket error [99]: Cannot assign requested address
 
