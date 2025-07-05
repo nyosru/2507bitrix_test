@@ -1,6 +1,9 @@
 <?php
 use Bitrix\Main\Loader;
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\UI\Filter\Options as FilterOptions;
+use Bitrix\Main\Grid\Options as GridOptions;
+use Bitrix\Main\UI\PageNavigation;
 use Phpcatcom\Testmodule\CurrencyRateTable;
 use Bitrix\Main\Type\Date;
 
@@ -18,134 +21,126 @@ $APPLICATION->SetTitle(Loc::getMessage("PHP_CATCOM_TESTMODULE_LIST_TITLE"));
 
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_after.php");
 
-// Обработка сохранения (добавление/редактирование)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && check_bitrix_sessid()) {
-    $id = intval($_POST['ID'] ?? 0);
-    $code = strtoupper(trim($_POST['CODE'] ?? ''));
-    $date = trim($_POST['DATE'] ?? '');
-    $course = floatval($_POST['COURSE'] ?? 0);
+// Идентификаторы фильтра и грида
+$filterId = 'phpcatcom_testmodule_filter';
+$gridId = 'phpcatcom_testmodule_grid';
 
-    $errors = [];
+// Опции фильтра
+$filterOptions = new FilterOptions($filterId);
+$filterData = $filterOptions->getFilter([
+    ['id' => 'DATE_FROM', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_DATE_FROM'), 'type' => 'date'],
+    ['id' => 'DATE_TO', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_DATE_TO'), 'type' => 'date'],
+    ['id' => 'COURSE_FROM', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_COURSE_FROM'), 'type' => 'number'],
+    ['id' => 'COURSE_TO', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_COURSE_TO'), 'type' => 'number'],
+    ['id' => 'CODE', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_CODE'), 'type' => 'string'],
+]);
 
-    if (strlen($code) !== 3) {
-        $errors[] = Loc::getMessage("PHP_CATCOM_TESTMODULE_ERROR_CODE");
-    }
-    if (!$date || !($dateObj = Date::createFromPhp(new \DateTime($date)))) {
-        $errors[] = Loc::getMessage("PHP_CATCOM_TESTMODULE_ERROR_DATE");
-    }
-    if ($course <= 0) {
-        $errors[] = Loc::getMessage("PHP_CATCOM_TESTMODULE_ERROR_COURSE");
-    }
+// Формируем фильтр для ORM
+$filter = [];
 
-    if (empty($errors)) {
-        if ($id > 0) {
-            $result = CurrencyRateTable::update($id, [
-                'CODE' => $code,
-                'DATE' => $dateObj,
-                'COURSE' => $course,
-            ]);
-        } else {
-            $result = CurrencyRateTable::add([
-                'CODE' => $code,
-                'DATE' => $dateObj,
-                'COURSE' => $course,
-            ]);
-        }
-
-        if ($result->isSuccess()) {
-            LocalRedirect($APPLICATION->GetCurPageParam("", ["ID", "edit"]));
-        } else {
-            $errors = $result->getErrorMessages();
-        }
-    }
+if (!empty($filterData['DATE_FROM'])) {
+    $filter['>=DATE'] = Date::createFromUserTime($filterData['DATE_FROM']);
+}
+if (!empty($filterData['DATE_TO'])) {
+    $filter['<=DATE'] = Date::createFromUserTime($filterData['DATE_TO']);
+}
+if (!empty($filterData['COURSE_FROM'])) {
+    $filter['>=COURSE'] = floatval($filterData['COURSE_FROM']);
+}
+if (!empty($filterData['COURSE_TO'])) {
+    $filter['<=COURSE'] = floatval($filterData['COURSE_TO']);
+}
+if (!empty($filterData['CODE'])) {
+    $filter['%CODE'] = $filterData['CODE'];
 }
 
-// Если редактируем запись — загружаем данные
-$editId = intval($_GET['edit'] ?? 0);
-$editRecord = null;
-if ($editId > 0) {
-    $editRecord = CurrencyRateTable::getById($editId)->fetch();
+// Опции грида (сортировка, постраничный вывод)
+$gridOptions = new GridOptions($gridId);
+$sort = $gridOptions->getSorting(['sort' => ['DATE' => 'DESC'], 'vars' => ['by' => 'by', 'order' => 'order']]);
+$navParams = $gridOptions->getNavParams();
+
+$nav = new PageNavigation($gridId);
+$nav->allowAllRecords(false)
+    ->setPageSize($navParams['nPageSize'])
+    ->initFromUri();
+
+$query = CurrencyRateTable::getList([
+    'filter' => $filter,
+    'order' => $sort['sort'],
+    'limit' => $nav->getPageSize(),
+    'offset' => $nav->getOffset(),
+]);
+
+$totalCount = CurrencyRateTable::getCount($filter);
+$nav->setRecordCount($totalCount);
+
+$rows = [];
+while ($item = $query->fetch()) {
+    $rows[] = [
+        'id' => $item['ID'],
+        'data' => $item,
+        'columns' => [
+            'ID' => $item['ID'],
+            'CODE' => htmlspecialcharsbx($item['CODE']),
+            'DATE' => $item['DATE'],
+            'COURSE' => $item['COURSE'],
+        ],
+    ];
 }
+
+$columns = [
+//    ['id' => 'ID', 'name' => 'ID', 'sort' => 'ID', 'default' => true],
+    ['id' => 'CODE', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_CODE'), 'sort' => 'CODE', 'default' => true],
+    ['id' => 'DATE', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_DATE'), 'sort' => 'DATE', 'default' => true],
+    ['id' => 'COURSE', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_COURSE'), 'sort' => 'COURSE', 'default' => true],
+];
 
 ?>
 
-<?php if (!empty($errors)): ?>
-    <div class="adm-info-message adm-info-message-error">
-        <ul>
-            <?php foreach ($errors as $error): ?>
-                <li><?= htmlspecialcharsbx($error) ?></li>
-            <?php endforeach; ?>
-        </ul>
-    </div>
-<?php endif; ?>
-
-<?php if ($editRecord): ?>
-    <h2><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_EDIT_TITLE") ?></h2>
-    <form method="post" action="">
-        <?= bitrix_sessid_post() ?>
-        <input type="hidden" name="ID" value="<?= $editRecord['ID'] ?>">
-        <table class="adm-detail-content-table edit-table">
-            <tr>
-                <td><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_FIELD_CODE") ?>:</td>
-                <td><input type="text" name="CODE" maxlength="3" value="<?= htmlspecialcharsbx($editRecord['CODE']) ?>" required></td>
-            </tr>
-<!--            <tr><td>--><?// echo '<pre>',print_r($editRecord),'</pre>'; ?><!--</td></tr>-->
-            <tr>
-                <td><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_FIELD_DATE") ?>:</td>
-                <td>
-                    <?php
-                    $dateValue = $editRecord['DATE'] instanceof \Bitrix\Main\Type\Date
-                    ? $editRecord['DATE']->format('Y-m-d')
-                    : substr($editRecord['DATE'], 0, 10);
-                    ?>
-                    <input type="date" name="DATE" value="<?= $dateValue ?>" required></td>
-            </tr>
-            <tr>
-                <td><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_FIELD_COURSE") ?>:</td>
-                <td><input type="number" step="0.0001" name="COURSE" value="<?= htmlspecialcharsbx($editRecord['COURSE']) ?>" required></td>
-            </tr>
-        </table>
-        <input type="submit" value="<?= Loc::getMessage("PHP_CATCOM_TESTMODULE_SAVE_BUTTON") ?>">
-        <a href="<?= $APPLICATION->GetCurPage() ?>"><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_CANCEL") ?></a>
-    </form>
-<?php else: ?>
-    <h2><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_LIST_TITLE") ?></h2>
-    <a href="/bitrix/admin/phpcatcom_testmodule_add.php?lang=ru"><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_ADD_NEW") ?></a>
-<style>
-    .adm-list-table th { text-align: left; }
-    .adm-list-table tbody { background-color: #ffffff; }
-.adm-list-table tbody tr:nth-child(even) {  background-color: #eeeeee;}
-
-    .adm-list-table td{ padding: 2px; }
-</style>
-    <table class="adm-list-table" style="width: 600px; margin-top: 10px;">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_FIELD_CODE") ?></th>
-            <th><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_FIELD_DATE") ?></th>
-            <th><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_FIELD_COURSE") ?></th>
-            <th><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_ACTIONS") ?></th>
-        </tr>
-        </thead>
-        <tbody>
+    <form method="GET" id="filter_form" name="filter_form">
         <?php
-        $rs = CurrencyRateTable::getList(['order' => ['DATE' => 'DESC']]);
-        while ($item = $rs->fetch()):
-            ?>
-            <tr>
-                <td><?= $item['ID'] ?></td>
-                <td><?= htmlspecialcharsbx($item['CODE']) ?></td>
-                <td><?= htmlspecialcharsbx($item['DATE']) ?></td>
-                <td><?= htmlspecialcharsbx($item['COURSE']) ?></td>
-                <td>
-                    <a href="?edit=<?= $item['ID'] ?>"><?= Loc::getMessage("PHP_CATCOM_TESTMODULE_EDIT") ?></a>
-                </td>
-            </tr>
-        <?php endwhile; ?>
-        </tbody>
-    </table>
-<?php endif; ?>
+        $APPLICATION->IncludeComponent(
+            "bitrix:main.ui.filter",
+            "",
+            [
+                'FILTER_ID' => $filterId,
+                'GRID_ID' => $gridId,
+                'FILTER' => [
+                    ['id' => 'DATE_FROM', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_DATE_FROM'), 'type' => 'date'],
+                    ['id' => 'DATE_TO', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_DATE_TO'), 'type' => 'date'],
+                    ['id' => 'COURSE_FROM', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_COURSE_FROM'), 'type' => 'number'],
+                    ['id' => 'COURSE_TO', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_COURSE_TO'), 'type' => 'number'],
+                    ['id' => 'CODE', 'name' => Loc::getMessage('PHP_CATCOM_TESTMODULE_FIELD_CODE'), 'type' => 'string'],
+                ],
+                'ENABLE_LABEL' => true,
+                'ENABLE_LIVE_SEARCH' => false,
+            ],
+            false
+        );
+        ?>
+    </form>
+
+<?php
+$APPLICATION->IncludeComponent(
+    "bitrix:main.ui.grid",
+    "",
+    [
+        'GRID_ID' => $gridId,
+        'COLUMNS' => $columns,
+        'ROWS' => $rows,
+        'NAV_OBJECT' => $nav,
+        'TOTAL_ROWS_COUNT' => $totalCount,
+        'SHOW_PAGINATION' => true,
+        'SHOW_NAVIGATION_PANEL' => true,
+        'ALLOW_COLUMNS_SORT' => true,
+        'ALLOW_COLUMNS_RESIZE' => true,
+        'ALLOW_HORIZONTAL_SCROLL' => true,
+        'SHOW_ROW_CHECKBOXES' => false,
+        'SHOW_ROW_ACTIONS_MENU' => false,
+        'SHOW_GRID_SETTINGS_MENU' => true,
+    ]
+);
+?>
 
 <?php
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_admin.php");

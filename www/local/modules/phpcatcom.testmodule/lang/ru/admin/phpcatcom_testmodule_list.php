@@ -13,4 +13,11 @@ $MESS["PHP_CATCOM_TESTMODULE_ACTIONS"] = "Действия";
 $MESS["PHP_CATCOM_TESTMODULE_ERROR_CODE"] = "Код валюты должен содержать ровно 3 символа.";
 $MESS["PHP_CATCOM_TESTMODULE_ERROR_DATE"] = "Введите корректную дату.";
 $MESS["PHP_CATCOM_TESTMODULE_ERROR_COURSE"] = "Курс должен быть положительным числом.";
-$MESS["ACCESS_DENIED"] = "Доступ запрещён";
+
+$MESS['PHP_CATCOM_TESTMODULE_FIELD_DATE_FROM'] = "Дата с";
+$MESS['PHP_CATCOM_TESTMODULE_FIELD_DATE_TO'] = "Дата по";
+$MESS['PHP_CATCOM_TESTMODULE_FIELD_COURSE_FROM'] = "Курс от";
+$MESS['PHP_CATCOM_TESTMODULE_FIELD_COURSE_TO'] = "Курс до";
+
+$MESS['PHP_CATCOM_TESTMODULE_LIST_TITLE'] = "Курсы валют";
+$MESS['ACCESS_DENIED'] = "Доступ запрещён";
