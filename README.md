@@ -2,10 +2,10 @@
 Сборка представляет собой связку:
 docker + nginx + php-fpm + mysql + memcached
 
-
-docker-compose up
-
-и идём кликать в localhost/
+   + копируем файл ``/.env.example`` в ``/.env``
+   + запускам сборку в консоли ``docker-compose up``
+   + и идём кликать в https://localhost/
+   + логин ``admin`` пароль ``123123123``
 
 ## Тестовое задание для PHP-программиста (Битрикс)
 
