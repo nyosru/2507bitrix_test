@@ -1,1 +1,3 @@
-managed_cache/*
+managed_cache/
+cache/
+/cache/js/s1/furniture_blue/kernel_sidepanel/kernel_sidepanel.map.js
