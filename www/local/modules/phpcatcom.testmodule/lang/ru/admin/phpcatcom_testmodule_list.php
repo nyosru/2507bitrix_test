@@ -1,23 +1,13 @@
 <?php
-
-$MESS["PHP_CATCOM_TESTMODULE_LIST_TITLE"] = "Список курсов валют";
-$MESS["PHP_CATCOM_TESTMODULE_EDIT_TITLE"] = "Редактирование курса валюты";
-$MESS["PHP_CATCOM_TESTMODULE_FIELD_CODE"] = "Код валюты";
-$MESS["PHP_CATCOM_TESTMODULE_FIELD_DATE"] = "Дата";
-$MESS["PHP_CATCOM_TESTMODULE_FIELD_COURSE"] = "Курс";
-$MESS["PHP_CATCOM_TESTMODULE_SAVE_BUTTON"] = "Сохранить";
-$MESS["PHP_CATCOM_TESTMODULE_CANCEL"] = "Отмена";
-$MESS["PHP_CATCOM_TESTMODULE_ADD_NEW"] = "Добавить новый курс";
-$MESS["PHP_CATCOM_TESTMODULE_EDIT"] = "Редактировать";
-$MESS["PHP_CATCOM_TESTMODULE_ACTIONS"] = "Действия";
-$MESS["PHP_CATCOM_TESTMODULE_ERROR_CODE"] = "Код валюты должен содержать ровно 3 символа.";
-$MESS["PHP_CATCOM_TESTMODULE_ERROR_DATE"] = "Введите корректную дату.";
-$MESS["PHP_CATCOM_TESTMODULE_ERROR_COURSE"] = "Курс должен быть положительным числом.";
-
+$MESS['PHP_CATCOM_TESTMODULE_LIST_TITLE'] = "Список курсов валют";
 $MESS['PHP_CATCOM_TESTMODULE_FIELD_DATE_FROM'] = "Дата с";
 $MESS['PHP_CATCOM_TESTMODULE_FIELD_DATE_TO'] = "Дата по";
 $MESS['PHP_CATCOM_TESTMODULE_FIELD_COURSE_FROM'] = "Курс от";
 $MESS['PHP_CATCOM_TESTMODULE_FIELD_COURSE_TO'] = "Курс до";
-
-$MESS['PHP_CATCOM_TESTMODULE_LIST_TITLE'] = "Курсы валют";
+$MESS['PHP_CATCOM_TESTMODULE_FIELD_CODE'] = "Код валюты";
+$MESS['PHP_CATCOM_TESTMODULE_FIELD_DATE'] = "Дата";
+$MESS['PHP_CATCOM_TESTMODULE_FIELD_COURSE'] = "Курс";
+$MESS['PHP_CATCOM_TESTMODULE_EDIT'] = "Редактировать";
+$MESS['PHP_CATCOM_TESTMODULE_DELETE'] = "Удалить";
+$MESS['PHP_CATCOM_TESTMODULE_DELETE_CONFIRM'] = "Вы уверены, что хотите удалить эту запись?";
 $MESS['ACCESS_DENIED'] = "Доступ запрещён";
