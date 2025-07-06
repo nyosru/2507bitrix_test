@@ -24,15 +24,18 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_a
 
 // Обработка удаления записи
 if (
-    $_SERVER['REQUEST_METHOD'] === 'POST'
-    && check_bitrix_sessid()
-    && isset($_POST['action'])
-    && $_POST['action'] === 'delete'
-    && isset($_POST['id'])
+//    $_SERVER['REQUEST_METHOD'] === 'POST'
+//    &&
+    check_bitrix_sessid()
+    &&
+    isset($_REQUEST['action'])
+    && $_REQUEST['action'] === 'delete'
+    && isset($_REQUEST['id'])
 ) {
-    $deleteId = (int)$_POST['id'];
+    $deleteId = (int)$_REQUEST['id'];
     if ($deleteId > 0) {
         $deleteResult = CurrencyRateTable::delete($deleteId);
+
         if (!$deleteResult->isSuccess()) {
             $errors = $deleteResult->getErrorMessages();
             echo '<div class="adm-info-message adm-info-message-error"><ul>';
@@ -43,7 +46,9 @@ if (
         } else {
             LocalRedirect($APPLICATION->GetCurPageParam("", ["id", "action"]));
         }
+
     }
+
 }
 
 // Идентификаторы фильтра и грида
@@ -134,7 +139,7 @@ while ($item = $query->fetch()) {
             [
                 'ICON' => 'delete',
                 'TEXT' => Loc::getMessage('PHP_CATCOM_TESTMODULE_DELETE'),
-                'ONCLICK' => "if(confirm('" . Loc::getMessage('PHP_CATCOM_TESTMODULE_DELETE_CONFIRM') . "')) { BX.ajax.post('" . $APPLICATION->GetCurPage() . "', {id: {$item['ID']}, action: 'delete', " . bitrix_sessid_get() . " }, function(){location.reload();}); }",
+                'ONCLICK' => "if(confirm('".CUtil::JSEscape(Loc::getMessage('PHP_CATCOM_TESTMODULE_DELETE_CONFIRM'))."')) { location.href='?id={$item['ID']}&lang=" . LANGUAGE_ID . "&action=delete&sessid=" . bitrix_sessid()."'; }",
             ],
         ],
     ];
