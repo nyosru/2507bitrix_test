@@ -13,7 +13,7 @@ $aMenuLinks = array(
         "currency/",
         array(),
         array(),
-        ""
+        "IsModuleInstalled('phpcatcom.testmodule')"
     ),
     array(
         "Новости",
